@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "metrics": {
+    "production_loc": 2307,
+    "production_files": 24,
+    "production_packages": 10,
+    "test_files": 9,
+    "production_functions": 179,
+    "decision_points": 346
+  },
+  "persistence": {
+    "module": "go.etcd.io/bbolt",
+    "entities": [
+      "Project",
+      "MaterialRecord",
+      "Script",
+      "Timeline",
+      "AuditEvent",
+      "Attachment",
+      "Workflow",
+      "ExportBundle"
+    ],
+    "reopen_test": "TestPersistenceSurvivesReopen"
+  },
+  "workflows": [
+    {
+      "steps": [
+        "create project",
+        "register materials",
+        "design scripts and timeline",
+        "review approve and archive"
+      ],
+      "test": "TestWorkflowCreateReviewArchive"
+    },
+    {
+      "steps": [
+        "search materials",
+        "select I-109",
+        "update title and note",
+        "confirm publish data"
+      ],
+      "test": "TestWorkflowSearchUpdatePublish"
+    },
+    {
+      "steps": [
+        "import material rows",
+        "validate required fields",
+        "persist accepted rows",
+        "export release report"
+      ],
+      "test": "TestWorkflowImportReport"
+    }
+  ]
+}
