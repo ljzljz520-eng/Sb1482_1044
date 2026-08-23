@@ -76,9 +76,12 @@ func (b *Builder) ReplacePlan(projectID string, plan Plan) error {
 	}
 	project.Timeline = make([]model.Timeline, len(plan.Scenes))
 	copy(project.Timeline, plan.Scenes)
-	for _, item := range project.Timeline {
-		item.ProjectID = projectID
-		if err := b.storage.SaveTimeline(item); err != nil {
+	for index := range project.Timeline {
+		// Mutate the slice element directly; a range-value copy would leave
+		// ProjectID unset on the persisted project, so the timeline scenes
+		// would round-trip without their owning project reference.
+		project.Timeline[index].ProjectID = projectID
+		if err := b.storage.SaveTimeline(project.Timeline[index]); err != nil {
 			return err
 		}
 	}
